@@ -1,37 +1,11 @@
-import requests
-import json
-
-def emotion_detector(text_to_analyze):
-    url = 'https://skills.network'
-    headers = {"grpc-metadata-mm-model-id": "emotion_aggregated-workflow_lang_en_stock"}
-    myobj = { "raw_document": { "text": text_to_analyze } }
+def analyze_emotion(text):
+    if not text:
+        return "invalid"
     
-    response = requests.post(url, json = myobj, headers = headers)
-    formatted_response = json.loads(response.text)
-    
-    if response.status_code == 200:
-        emotions = formatted_response['emotionPredictions']['emotion']
-        anger = emotions['anger']
-        disgust = emotions['disgust']
-        fear = emotions['fear']
-        joy = emotions['joy']
-        sadness = emotions['sadness']
-        dominant_emotion = max(emotions, key=emotions.get)
-        
-        return {
-            'anger': anger,
-            'disgust': disgust,
-            'fear': fear,
-            'joy': joy,
-            'sadness': sadness,
-            'dominant_emotion': dominant_emotion
-        }
-    elif response.status_code == 400:
-        return {
-            'anger': None,
-            'disgust': None,
-            'fear': None,
-            'joy': None,
-            'sadness': None,
-            'dominant_emotion': None
-        }
+    text_lower = text.lower()
+    if "happy" in text_lower or "glad" in text_lower or "good" in text_lower:
+        return "happy"
+    elif "angry" in text_lower or "mad" in text_lower or "bad" in text_lower:
+        return "angry"
+    else:
+        return "neutral"
