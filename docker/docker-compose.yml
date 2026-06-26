@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  # 1. Development Environment
+  development:
+    build: 
+      context: ..      # Goes up one level to find server.py and project scripts
+      dockerfile: ./docker/Dockerfile
+    container_name: app-development
+    ports:
+      - "8081:5000"    # Accessible from your host PC at localhost:8081
+    environment:
+      - ENV=development
+    volumes:
+      - ..:/app        # Hot-reload: changes on your host PC sync instantly to the container
+
+  # 2. Testing Environment
+  testing:
+    build:
+      context: ..
+      dockerfile: ./docker/Dockerfile
+    container_name: app-testing
+    ports:
+      - "8082:5000"    # Accessible from your host PC at localhost:8082
+    environment:
+      - ENV=testing
+
+  # 3. Validation Environment
+  validation:
+    build:
+      context: ..
+      dockerfile: ./docker/Dockerfile
+    container_name: app-validation
+    ports:
+      - "8083:5000"    # Accessible from your host PC at localhost:8083
+    environment:
+      - ENV=validation
